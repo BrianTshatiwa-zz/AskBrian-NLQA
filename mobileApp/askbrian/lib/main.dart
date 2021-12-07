@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'question_answering.dart';
 
 void main(){ 
   runApp(HomePage());
@@ -23,7 +24,7 @@ class HomePage extends StatelessWidget {
             ],),
           ),
           body: TabBarView(children: [ 
-            Text('Question Answer'),
+            QuestionAnswering(),
             Text('About'),
           ],),
         ),
