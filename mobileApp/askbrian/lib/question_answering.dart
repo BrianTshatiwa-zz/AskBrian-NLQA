@@ -10,14 +10,15 @@ class QuestionAnswering extends StatefulWidget {
 
 class _QuestionAnsweringState extends State<QuestionAnswering> {
   bool _loading = true;
+  String value = "";
   String answer = '';
   late File _image;
   late List _output;
   final picker = ImagePicker();
 
   getTextFromImage(File image) { 
-    var text = FlutterTesseractOcr.extractText(image.path);
-    print(text);
+    var context_text = FlutterTesseractOcr.extractText(image.path);
+    print(context_text);
     setState(() {
       _loading = false;
     });
@@ -50,8 +51,8 @@ class _QuestionAnsweringState extends State<QuestionAnswering> {
                     color: Color.fromRGBO(196, 196, 196, 1)
                   ),
                 ) : Container(  
-                  width: 200,
-                  height: 200,
+                  width: 180,
+                  height: 180,
                   child: Image.file(_image),
                   decoration: BoxDecoration(  
                     color: Color.fromRGBO(196, 196, 196, 1)
@@ -70,9 +71,33 @@ class _QuestionAnsweringState extends State<QuestionAnswering> {
               SizedBox(width: 10,),
               ]
               ),
+              SizedBox(height: 15,),
               Text(answer),
-              
-            ],
+              SizedBox(height: 15,),
+              _loading ? Text("upload an image and start asking questions"): Row(children: [
+                Expanded(child: TextField(
+              onChanged: (text) {
+                value = text;
+              },
+              decoration: InputDecoration(
+                border: OutlineInputBorder(),
+                labelText: 'Query',
+                hintText: 'Enter a question'))),
+                SizedBox(width: 10,),
+                Expanded(child:RaisedButton(
+                child: Text("submit"),
+                color: Colors.green[800],
+                onPressed: () { 
+                  print(value);
+                  setState(() {
+                    answer = "In a farmhouse";
+                  });
+                },
+              ),
+              ),
+              ],
+              )
+              ],
           ),
         ),
       ),
