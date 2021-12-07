@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:flutter_tesseract_ocr/flutter_tesseract_ocr.dart';
 import 'dart:io';
 
 class QuestionAnswering extends StatefulWidget {
@@ -9,10 +10,27 @@ class QuestionAnswering extends StatefulWidget {
 
 class _QuestionAnsweringState extends State<QuestionAnswering> {
   bool _loading = true;
+  String answer = '';
   late File _image;
   late List _output;
   final picker = ImagePicker();
 
+  getTextFromImage(File image) { 
+    var text = FlutterTesseractOcr.extractText(image.path);
+    print(text);
+    setState(() {
+      _loading = false;
+    });
+  }
+
+  pickGalleryImage() async {
+    var image = await picker.pickImage(source: ImageSource.gallery);
+    if (image == null) return null;
+    setState(() {
+      _image = File(image.path);
+    });
+    getTextFromImage(_image);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -46,14 +64,14 @@ class _QuestionAnsweringState extends State<QuestionAnswering> {
                 Expanded(child: RaisedButton( 
                 color: Colors.green[800],
                 child: Text('Upload a doc photo'),
-                onPressed: (){
-                  print("pressed");
-                },
+                onPressed: pickGalleryImage,
               )
               ),
               SizedBox(width: 10,),
               ]
-              )
+              ),
+              Text(answer),
+              
             ],
           ),
         ),
